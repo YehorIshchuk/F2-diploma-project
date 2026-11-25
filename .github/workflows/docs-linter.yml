@@ -1,0 +1,47 @@
+# Docs Quality Gate: автоматична перевірка документації пояснювальної записки (docs/)
+name: Docs Quality Gate
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  markdownlint:
+    name: Markdown formatting (markdownlint)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Lint Markdown in docs/
+        uses: DavidAnson/markdownlint-cli2-action@v25
+        with:
+          globs: docs/**/*.md
+
+  vale:
+    name: Style and terminology (Vale)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      VALE_VERSION: 3.13.0
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Install Vale
+        run: |
+          curl -sSfL "https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" \
+            | tar -xz -C /usr/local/bin vale
+          vale --version
+
+      - name: Check slang, transliteration and marketing phrases
+        run: vale --config .vale.ini --minAlertLevel=error docs

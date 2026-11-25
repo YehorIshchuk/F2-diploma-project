@@ -239,29 +239,29 @@
 
 ### 1.5.2. Функціональні вимоги (Core Features)
 
-**Identity & Tenant Service**
+#### Identity & Tenant Service
 
 - FR-1. Реєструвати платника як окремого тенанта, призначати ролі (власник, бухгалтер, адміністратор правил) і делегувати бухгалтеру доступ до кількох профілів з ізоляцією даних на рівні СУБД (Row-Level Security).
 
-**Invoicing Service**
+#### Invoicing Service
 
 - FR-2. Створювати рахунки-фактури та акти виконаних робіт, генерувати їх у форматі PDF і вести статус оплати (виставлено, частково оплачено, оплачено).
 
-**Bank Ingestion & Reconciliation Service**
+#### Bank Ingestion & Reconciliation Service
 
 - FR-3. Імпортувати банківські операції з файлів виписок за шаблонами та через API банків, нормалізувати їх і відхиляти дублікати за ключем ідемпотентності.
 - FR-4. Зіставляти надходження з рахунками за точним і нечітким збігом, обробляти часткові оплати й передавати неоднозначні збіги до черги ручного підтвердження.
 
-**Tax Engine Service**
+#### Tax Engine Service
 
 - FR-5. Обчислювати ЄП, ВЗ і ЄСВ за податковий період із вибором версії правил за датою операції, зберігати ідентифікатор версії правил і хеш вхідних даних, відтворювати розрахунок на запит і формувати дані декларації платника ЄП у форматі XML.
 - FR-6. Контролювати заповнення граничного обсягу доходу групи та генерувати події при досягненні 80 %, 95 % і 100 % ліміту.
 
-**Rules Registry Service**
+#### Rules Registry Service
 
 - FR-7. Зберігати версії податкових правил і параметрів з періодом дії та моментом реєстрації, публікувати їх за циклом Draft → Review → Published, виконувати тіньовий перерахунок і формувати порівняльний звіт «було / стало».
 
-**Notification Service**
+#### Notification Service
 
 - FR-8. Формувати податковий календар платника з урахуванням групи та надсилати сповіщення про строки сплати, подання звітності й пороги ліміту доходу каналами email і Telegram.
 
@@ -307,29 +307,29 @@
 
 ## Перелік джерел до розділу 1
 
-1. M.E.Doc. Технічні вимоги програми. URL: https://medoc.ua/page/technicalrequirements
-2. Мережева версія M.E.Doc: покрокове встановлення сервера. URL: https://stcentr.com.ua/knowledge/yak-vstanoviti-merezhevu-versiyu-programi-medoc
-3. Researchers Dissect Stealthy Backdoor Used by NotPetya Operators. SecurityWeek. URL: https://www.securityweek.com/researchers-dissect-stealthy-backdoor-used-notpetya-operators
-4. Лега О. В., Яловега Л. В., Прийдак Т. Б. Основні переваги онлайн-бухгалтерії для ФОП. MicroCAD-2023. НТУ «ХПІ». URL: https://www.kpi.kharkov.ua/archive/MicroCAD/2023/%D0%A1%D0%B5%D0%BA%D1%86%D1%96%D1%8F%205.%20%D0%95%D0%BA%D0%BE%D0%BD%D0%BE%D0%BC%D1%96%D0%BA%D0%B0,%20%D0%BC%D0%B5%D0%BD%D0%B5%D0%B4%D0%B6%D0%BC%D0%B5%D0%BD%D1%82%20%D1%96%20%D0%BC%D1%96%D0%B6%D0%BD%D0%B0%D1%80%D0%BE%D0%B4%D0%BD%D0%B8%D0%B9%20%D0%B1%D1%96%D0%B7%D0%BD%D0%B5%D1%81/%D0%9E%D0%A1%D0%9D%D0%9E%D0%92%D0%9D%D0%86%20%D0%9F%D0%95%D0%A0%D0%95%D0%92%D0%90%D0%93%D0%98%20%D0%9E%D0%9D%D0%9B%D0%90%D0%99%D0%9D-%D0%91%D0%A3%D0%A5%D0%93%D0%90%D0%9B%D0%A2%D0%95%D0%A0%D0%86%D0%87%20%D0%94%D0%9B%D0%AF%20%D0%A4%D0%9E%D0%9F.pdf
-5. Таксер. База знань: Електронний документообіг в Таксері. URL: https://taxer.ua/uk/kb/elzvit-taxer
-6. Таксер. Базові та розширені можливості сервісу. URL: https://taxer.ua/uk/features
-7. Таксер. База знань: Синхронізація виписки з Monobank. URL: https://taxer.ua/ru/kb/synkhronizatsiia-vypysky-z-monobank
-8. ПУМБ і Таксер запустили автоматичну синхронізацію виписки для ФОП. Finance.ua. URL: https://news.finance.ua/ua/pumb-i-takser-zapustyly-avtomatychnu-synhronizaciyu-vypysky-dlya-fop-menshe-rutyny-bil-she-chasu-na-biznes
-9. Таксер. База знань: Найчастіші запитання. URL: https://taxer.ua/uk/kb/faq
-10. Таксер. Ціни на передплату та опис типів передплати. URL: https://taxer.ua/uk/prices
-11. ДПС України. Інформаційно-комунікаційна система «Електронний кабінет»: довідка. URL: https://cabinet.tax.gov.ua/help/help.pdf
-12. ДПС України. Електронний кабінет: функціональні частини та способи входу. URL: https://tax.gov.ua/data/files/292970.pdf
-13. ДПС України. Опис API Електронного кабінету. URL: https://cabinet.tax.gov.ua/help/api.html
-14. ДПС України. Опис API доступу до інформації приватної частини ЕК. URL: https://cabinet.tax.gov.ua/help/api-registers-int.html
-15. ДПС України. Опис API доступу до реєстрів відкритої частини ЕК. URL: https://cabinet.tax.gov.ua/help/en/api-registers.html
-16. ДПС призупинила використання API відкритої частини Електронного кабінету на час воєнного стану. 7eminar. URL: https://7eminar.ua/news/25916-dps-prizupinila-vikoristannya-api-vidkritoyi-castini-elektronnogo-kabinetu-na-cas
-17. Мінзарплата 8 647 грн з 01.01.2026: як зміняться ЄСВ, єдиний податок і ліміти ФОП. Бухгалтерська платформа. URL: https://buhplatforma.com.ua/news/109554-minzarplata-8-647-grn-z-01-01-2026-iak-zminiatsia-yesv-iedynyi-podatok-i-limity-fop
-18. Ставки єдиного податку та військового збору у 2026 році для ФОП груп 1, 2 та 3. Податки & бухоблік. URL: https://i.factor.ua/ukr/journals/nibu/2026/january/issue-9/article-135909.html
-19. Скільки податків платитимуть ФОПи в 2026 році: розрахунок для різних груп. Zaxid.net. URL: https://zaxid.net/skilki_podatkiv_platitimut_fopi_v_2026_rotsi_rozrahunok_n1626135
-20. Військовий збір для ФОП у 2025 році: ставки, звітність, штрафи. The Page. URL: https://thepage.ua/ua/experts/vijskovij-zbir-dlya-fop-u-2025-roci-stavki-zvitnist-shtrafi
-21. В яких розмірах у 2026 році сплачувати ЄП та ВЗ фізособам-єдинникам І та ІІ груп. Дебет-Кредит. URL: https://news.dtkt.ua/simple/individual-single-tax/106746-v-iakix-rozmirax-u-2026-roci-splacuvati-jep-ta-vz-fizosobam-jedinnikam-i-ta-ii-grup
-22. Нові правила для надавачів платіжних послуг з серпня 2025 року. 7eminar. URL: https://7eminar.ua/news/11929-novi-pravila-dlya-nadavaciv-platiznix-poslug-z-serpnya-2025-roku
-23. Ощадбанк, OTP та Sense Bank запустили відкритий банкінг: що змінилося для клієнтів. Мінфін. URL: https://minfin.com.ua/ua/2026/08/05/179093822/
-24. Відкритий банкінг – що це та як працюватиме. Українські Новини. URL: https://ukranews.com/ua/news/1097273-vidkrytyj-banking-shho-tse-ta-yak-pratsyuvatyme
-25. Постанова Правління НБУ від 25.07.2025 № 80 «Про затвердження Положення про відкритий банкінг в Україні». URL: https://bank.gov.ua/admin_uploads/law/25072025_80.pdf
-26. 2026 рік для ФОП: вже діють нові розміри єдиного податку та військового збору. Бухгалтерська платформа. URL: https://buhplatforma.com.ua/news/109734-2026-rik-dlia-fop-vzhe-diiut-novi-rozmiry-iedynogo-podatku-ta-viiskovogo-zboru
+1. M.E.Doc. Технічні вимоги програми. URL: <https://medoc.ua/page/technicalrequirements>
+2. Мережева версія M.E.Doc: покрокове встановлення сервера. URL: <https://stcentr.com.ua/knowledge/yak-vstanoviti-merezhevu-versiyu-programi-medoc>
+3. Researchers Dissect Stealthy Backdoor Used by NotPetya Operators. SecurityWeek. URL: <https://www.securityweek.com/researchers-dissect-stealthy-backdoor-used-notpetya-operators>
+4. Лега О. В., Яловега Л. В., Прийдак Т. Б. Основні переваги онлайн-бухгалтерії для ФОП. MicroCAD-2023. НТУ «ХПІ». URL: <https://www.kpi.kharkov.ua/archive/MicroCAD/2023/%D0%A1%D0%B5%D0%BA%D1%86%D1%96%D1%8F%205.%20%D0%95%D0%BA%D0%BE%D0%BD%D0%BE%D0%BC%D1%96%D0%BA%D0%B0,%20%D0%BC%D0%B5%D0%BD%D0%B5%D0%B4%D0%B6%D0%BC%D0%B5%D0%BD%D1%82%20%D1%96%20%D0%BC%D1%96%D0%B6%D0%BD%D0%B0%D1%80%D0%BE%D0%B4%D0%BD%D0%B8%D0%B9%20%D0%B1%D1%96%D0%B7%D0%BD%D0%B5%D1%81/%D0%9E%D0%A1%D0%9D%D0%9E%D0%92%D0%9D%D0%86%20%D0%9F%D0%95%D0%A0%D0%95%D0%92%D0%90%D0%93%D0%98%20%D0%9E%D0%9D%D0%9B%D0%90%D0%99%D0%9D-%D0%91%D0%A3%D0%A5%D0%93%D0%90%D0%9B%D0%A2%D0%95%D0%A0%D0%86%D0%87%20%D0%94%D0%9B%D0%AF%20%D0%A4%D0%9E%D0%9F.pdf>
+5. Таксер. База знань: Електронний документообіг в Таксері. URL: <https://taxer.ua/uk/kb/elzvit-taxer>
+6. Таксер. Базові та розширені можливості сервісу. URL: <https://taxer.ua/uk/features>
+7. Таксер. База знань: Синхронізація виписки з Monobank. URL: <https://taxer.ua/ru/kb/synkhronizatsiia-vypysky-z-monobank>
+8. ПУМБ і Таксер запустили автоматичну синхронізацію виписки для ФОП. Finance.ua. URL: <https://news.finance.ua/ua/pumb-i-takser-zapustyly-avtomatychnu-synhronizaciyu-vypysky-dlya-fop-menshe-rutyny-bil-she-chasu-na-biznes>
+9. Таксер. База знань: Найчастіші запитання. URL: <https://taxer.ua/uk/kb/faq>
+10. Таксер. Ціни на передплату та опис типів передплати. URL: <https://taxer.ua/uk/prices>
+11. ДПС України. Інформаційно-комунікаційна система «Електронний кабінет»: довідка. URL: <https://cabinet.tax.gov.ua/help/help.pdf>
+12. ДПС України. Електронний кабінет: функціональні частини та способи входу. URL: <https://tax.gov.ua/data/files/292970.pdf>
+13. ДПС України. Опис API Електронного кабінету. URL: <https://cabinet.tax.gov.ua/help/api.html>
+14. ДПС України. Опис API доступу до інформації приватної частини ЕК. URL: <https://cabinet.tax.gov.ua/help/api-registers-int.html>
+15. ДПС України. Опис API доступу до реєстрів відкритої частини ЕК. URL: <https://cabinet.tax.gov.ua/help/en/api-registers.html>
+16. ДПС призупинила використання API відкритої частини Електронного кабінету на час воєнного стану. 7eminar. URL: <https://7eminar.ua/news/25916-dps-prizupinila-vikoristannya-api-vidkritoyi-castini-elektronnogo-kabinetu-na-cas>
+17. Мінзарплата 8 647 грн з 01.01.2026: як зміняться ЄСВ, єдиний податок і ліміти ФОП. Бухгалтерська платформа. URL: <https://buhplatforma.com.ua/news/109554-minzarplata-8-647-grn-z-01-01-2026-iak-zminiatsia-yesv-iedynyi-podatok-i-limity-fop>
+18. Ставки єдиного податку та військового збору у 2026 році для ФОП груп 1, 2 та 3. Податки & бухоблік. URL: <https://i.factor.ua/ukr/journals/nibu/2026/january/issue-9/article-135909.html>
+19. Скільки податків платитимуть ФОПи в 2026 році: розрахунок для різних груп. Zaxid.net. URL: <https://zaxid.net/skilki_podatkiv_platitimut_fopi_v_2026_rotsi_rozrahunok_n1626135>
+20. Військовий збір для ФОП у 2025 році: ставки, звітність, штрафи. The Page. URL: <https://thepage.ua/ua/experts/vijskovij-zbir-dlya-fop-u-2025-roci-stavki-zvitnist-shtrafi>
+21. В яких розмірах у 2026 році сплачувати ЄП та ВЗ фізособам-єдинникам І та ІІ груп. Дебет-Кредит. URL: <https://news.dtkt.ua/simple/individual-single-tax/106746-v-iakix-rozmirax-u-2026-roci-splacuvati-jep-ta-vz-fizosobam-jedinnikam-i-ta-ii-grup>
+22. Нові правила для надавачів платіжних послуг з серпня 2025 року. 7eminar. URL: <https://7eminar.ua/news/11929-novi-pravila-dlya-nadavaciv-platiznix-poslug-z-serpnya-2025-roku>
+23. Ощадбанк, OTP та Sense Bank запустили відкритий банкінг: що змінилося для клієнтів. Мінфін. URL: <https://minfin.com.ua/ua/2026/08/05/179093822/>
+24. Відкритий банкінг – що це та як працюватиме. Українські Новини. URL: <https://ukranews.com/ua/news/1097273-vidkrytyj-banking-shho-tse-ta-yak-pratsyuvatyme>
+25. Постанова Правління НБУ від 25.07.2025 № 80 «Про затвердження Положення про відкритий банкінг в Україні». URL: <https://bank.gov.ua/admin_uploads/law/25072025_80.pdf>
+26. 2026 рік для ФОП: вже діють нові розміри єдиного податку та військового збору. Бухгалтерська платформа. URL: <https://buhplatforma.com.ua/news/109734-2026-rik-dlia-fop-vzhe-diiut-novi-rozmiry-iedynogo-podatku-ta-viiskovogo-zboru>

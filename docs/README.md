@@ -9,13 +9,17 @@
 |---|---|---|
 | [0_intro.md](0_intro.md) | Вступ: актуальність, об'єкт, предмет, мета, завдання | Наповнено |
 | [1_analysis.md](1_analysis.md) | Розділ 1. Аналіз предметної області та постановка задачі | Сформовано (1.1–1.5, висновки) |
-| [2_design.md](2_design.md) | Розділ 2. Проєктування архітектури системи | Сформовано (2.1–2.7: C4, ADR, ERD, API, алгоритми, інтеграційний аудит) |
+| [2_design.md](2_design.md) | Розділ 2. Обґрунтування архітектурних рішень та проєктування системи | Консолідовано (2.1–2.8, висновки): стиль і патерни, C4, серверне ядро, AppSec, API та топологія, Use Cases, ERD, інтеграційний аудит |
 | [3_implementation.md](3_implementation.md) | Розділ 3. Реалізація, тестування та розгортання | Каркас |
 | [4_conclusions.md](4_conclusions.md) | Висновки | Каркас |
 
-## Розділ 1: робочий документ
+## Зведений документ пояснювальної записки (Розділи 1–2)
 
-Консолідований документ Розділу 1 (Google Docs, доступ «Коментатор»): [F2_Diploma_Chapter1_Ishchuk](https://docs.google.com/document/d/1JQUeSONICKH3otokZ6KLzqHIqSzsY2PH/edit?usp=sharing)
+Консолідований моноліт першої половини роботи (Google Docs, доступ «Коментатор»): [F2_Diploma_Chapters1-2_Ishchuk](https://docs.google.com/document/d/1JQUeSONICKH3otokZ6KLzqHIqSzsY2PH/edit?usp=sharing). Документ містить Розділ 1 (аналіз предметної області) і Розділ 2 (обґрунтування архітектурних рішень та проєктування системи) у структурі, ідентичній [2_design.md](2_design.md).
+
+## Контроль якості документації (Docs Quality Gate)
+
+Кожен Pull Request у `main` автоматично перевіряє GitHub Actions workflow [docs-linter.yml](../.github/workflows/docs-linter.yml): markdownlint (правила — [.markdownlint-cli2.jsonc](../.markdownlint-cli2.jsonc)) контролює форматування й ієрархію заголовків, Vale (стилі — [.github/vale/styles/Diploma](../.github/vale/styles/Diploma)) блокує розмовний сленг, маркетингові формулювання та кириличну транслітерацію англомовних термінів.
 
 ## Матриця нефункціональних вимог (NFRs Matrix)
 
@@ -42,7 +46,8 @@
 |---|---|
 | [srs.md](srs.md) | Специфікація вимог (SRS) за ISO/IEC/IEEE 29148 |
 | [adr/](adr/) | Architecture Decision Records: [ADR-001](adr/0001-choice-of-technology.md) |
-| [api/openapi.yaml](api/openapi.yaml) | API-контракт OpenAPI 3.0.3 (імпорт виписок, розрахунки, тіньовий перерахунок) |
+| [api/openapi.yaml](api/openapi.yaml) | API-контракт OpenAPI 3.0.3: 9 операцій (імпорт виписок, розрахунки, тіньовий перерахунок, публікація правил) |
+| [models/F2_UseCase_Ishchuk.mdj](models/F2_UseCase_Ishchuk.mdj) | Модель StarUML: діаграма прецедентів (експорт — [assets/use-case-diagram.png](assets/use-case-diagram.png)) |
 | [proposal.md](proposal.md) | Thesis Proposal (ЛР №1) |
 | [ai-disclosure.md](ai-disclosure.md) | Протокол використання генеративного ШІ (AI Disclosure) |
 

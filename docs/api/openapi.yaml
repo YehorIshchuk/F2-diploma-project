@@ -9,6 +9,8 @@ info:
     2. Розрахунок податкових зобов'язань за період (Web SPA → API Gateway → Tax Engine Service).
     3. Тіньовий перерахунок і звіт «було / стало» після публікації нової версії правил
        (Web SPA → API Gateway → Tax Engine Service).
+    4. Публікація перевіреної версії податкових правил конвеєром CI репозиторію правил
+       (GitHub Actions → API Gateway → Rules Registry Service).
 
     Загальні правила:
     - Автентифікація: OAuth 2.0 / OpenID Connect (Keycloak), access token JWT RS256 у заголовку
@@ -37,6 +39,8 @@ tags:
     description: Tax Engine Service — розрахунок ЄП, ВЗ, ЄСВ
   - name: Shadow Runs
     description: Tax Engine Service — тіньовий перерахунок і аналіз впливу змін правил
+  - name: Rule Versions
+    description: Rules Registry Service — публікація версій податкових правил
 
 paths:
   /api/v1/bank-statements:
@@ -394,6 +398,57 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 
+  /api/v1/rule-versions:
+    post:
+      tags: [Rule Versions]
+      operationId: publishRuleVersion
+      summary: Опублікувати перевірену версію податкових правил
+      description: |
+        Викликається лише конвеєром CI репозиторію правил після успішних golden tests (SRS-NFR-COR-01).
+        Автентифікація — OAuth 2.0 Client Credentials, роль сервісного облікового запису `rules_publisher`.
+        Опублікована версія незмінна (SRS-FUN-20); виправлення наявного періоду реєструється новою
+        версією, а попередня отримує `superseded_at` (transaction time, SRS-FUN-19).
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishRuleVersionRequest'
+      responses:
+        '201':
+          description: Версію правил опубліковано; подію RuleSetPublished записано до outbox.
+          headers:
+            Location:
+              description: URI опублікованої версії правил.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RuleVersion'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: Період дії перетинається з чинною версією без позначки виправлення або версія з таким номером уже існує.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+
 components:
   securitySchemes:
     bearerAuth:
@@ -409,7 +464,7 @@ components:
       name: X-Tenant-ID
       in: header
       required: true
-      description: Ідентифікатор тенанта; перевіряється за таблицею MEMBERSHIPS (status = active).
+      description: Ідентифікатор тенанта; сервіс перевіряє членство користувача за локальною проєкцією MEMBERSHIP_SNAPSHOTS (status = active).
       schema:
         type: string
         format: uuid
@@ -417,7 +472,7 @@ components:
       name: Idempotency-Key
       in: header
       required: true
-      description: Унікальний ключ запиту клієнта; повтор із тим самим ключем протягом 24 год повертає першу відповідь.
+      description: Унікальний ключ запиту клієнта; повтор із тим самим ключем протягом 24 год повертає першу відповідь (зберігається в Redis, ключ idem:{service}:{subject}:{key}).
       schema:
         type: string
         format: uuid
@@ -439,7 +494,7 @@ components:
       name: cursor
       in: query
       required: false
-      description: Непрозорий курсор наступної сторінки з поля `next_cursor`.
+      description: Непрозорий курсор наступної сторінки з поля `next_cursor`, підписаний HMAC-SHA-256; змінений курсор відхиляється з кодом 400.
       schema:
         type: string
         maxLength: 200
@@ -846,4 +901,99 @@ components:
             $ref: '#/components/schemas/CalculationDiff'
         next_cursor:
           type: string
+          nullable: true
+
+    RuleParameter:
+      type: object
+      additionalProperties: false
+      required: [param_key, value, unit]
+      properties:
+        param_key:
+          type: string
+          enum: [rate, fixed_amount, income_limit]
+        value:
+          type: string
+          pattern: '^\d{1,12}(\.\d{1,6})?$'
+          description: Значення параметра (NUMERIC(18,6)), передається рядком без втрати точності.
+        unit:
+          type: string
+          enum: [ratio, uah]
+
+    PublishRuleVersionRequest:
+      type: object
+      additionalProperties: false
+      required: [rule_set_code, version_no, valid_from, calc_mode, parameters, legal_basis, git_commit_sha, content_sha256]
+      properties:
+        rule_set_code:
+          type: string
+          pattern: '^[a-z_]+(\.g[1-3])?$'
+          maxLength: 64
+          example: single_tax.g3
+        version_no:
+          type: integer
+          minimum: 1
+        valid_from:
+          type: string
+          format: date
+          description: Перше число місяця, з якого діє версія; інакше 422.
+        valid_to:
+          type: string
+          format: date
+          nullable: true
+          description: Перше число місяця, з якого версія вже не діє (межа не включається); null — безстроково.
+        supersedes_version_no:
+          type: integer
+          minimum: 1
+          nullable: true
+          description: Номер версії, яку виправляє ця версія за той самий період; без нього перетин періодів повертає 409.
+        calc_mode:
+          type: string
+          enum: [ratio, fixed_monthly]
+        parameters:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/RuleParameter'
+        legal_basis:
+          type: string
+          maxLength: 500
+        git_commit_sha:
+          type: string
+          pattern: '^[0-9a-f]{40}$'
+        content_sha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+          description: SHA-256 канонічного JSON версії; сервер перевіряє збіг перед збереженням.
+
+    RuleVersion:
+      type: object
+      required: [id, rule_set_code, version_no, valid_from, calc_mode, status, recorded_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        rule_set_code:
+          type: string
+        version_no:
+          type: integer
+        valid_from:
+          type: string
+          format: date
+        valid_to:
+          type: string
+          format: date
+          nullable: true
+        calc_mode:
+          type: string
+          enum: [ratio, fixed_monthly]
+        status:
+          type: string
+          enum: [published, superseded]
+        recorded_at:
+          type: string
+          format: date-time
+        superseded_at:
+          type: string
+          format: date-time
           nullable: true

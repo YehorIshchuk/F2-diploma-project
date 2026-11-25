@@ -14,13 +14,25 @@
 
 ## Структура репозиторію
 
-```
+```text
 .
-├── docs/                 # Документація за принципом Documentation as Code
-│   ├── proposal.md       # Thesis Proposal (технічна картка проєкту)
-│   └── ai-disclosure.md  # Протокол AI-асистованої валідації теми
-└── src/                  # Вихідний код (реалізація починається після затвердження теми)
+├── .github/
+│   ├── workflows/docs-linter.yml  # Docs Quality Gate: markdownlint + Vale на кожен Pull Request
+│   └── vale/styles/Diploma/       # Правила Vale: сленг, транслітерація, маркетинг
+├── .markdownlint-cli2.jsonc       # Правила форматування Markdown
+├── .vale.ini                      # Конфігурація Vale
+├── docs/                          # Пояснювальна записка за принципом Documentation as Code
+│   ├── 0_intro.md … 4_conclusions.md
+│   ├── srs.md                     # Специфікація вимог (ISO/IEC/IEEE 29148)
+│   ├── adr/                       # Architecture Decision Records
+│   ├── api/openapi.yaml           # API-контракт OpenAPI 3.0.3
+│   ├── models/                    # Моделі CASE-засобу StarUML
+│   ├── assets/                    # Експортовані зображення діаграм
+│   └── ai-disclosure.md           # Протокол використання генеративного ШІ
+└── src/                           # Вихідний код (Розділ 3)
 ```
+
+Зведений документ Розділів 1–2 (Google Docs): [F2_Diploma_Chapters1-2_Ishchuk](https://docs.google.com/document/d/1JQUeSONICKH3otokZ6KLzqHIqSzsY2PH/edit?usp=sharing).
 
 ## Угоди
 
